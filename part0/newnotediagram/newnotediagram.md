@@ -35,5 +35,5 @@ newnotediagram
         deactivate server
     end
     
-    NOTE the browser repeats the GET calls found above, and the server responds in turn
+    Note right of browser: The browser repeats the GET calls found above, and the server responds in turn
 ```
