@@ -27,5 +27,13 @@ newnotediagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
-   
+
+    loop User adds a new note
+        browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+        activate server
+        server-->>browser: Redirect / Refresh
+        deactivate server
+    end
+    
+    NOTE the browser repeats the GET calls found above, and the server responds in turn
 ```
