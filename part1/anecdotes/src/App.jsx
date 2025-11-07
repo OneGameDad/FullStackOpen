@@ -1,5 +1,14 @@
 import { useState } from 'react'
 
+const Section = ({ title, anecdotes, votes }) => {
+  return (
+    <div>
+      <h1>{title}</h1>
+      <p>{anecdotes}</p>
+      <p>{votes}</p>
+    </div>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -15,6 +24,9 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [votes, setVote] = useState(Array(anecdotes.length).fill(0))
+
+  const mostVotes = Math.max(...votes)
+  const mostVotesIndex = votes.indexOf(mostVotes)
 
   const updateVote = (index) => {
     const newVotes = [...votes]
@@ -37,12 +49,12 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>{votes[selected]}</p>
+      <Section title="Anecdote" anecdotes={anecdotes[selected]} votes={votes[selected]} />
       <p>
         <button onClick={() => updateVote(selected)}>Vote</button>
         <button onClick={updateSelected}>Next Anecdote</button>
       </p>
+      <Section title="Anecdote with the most votes" anecdotes={anecdotes[mostVotesIndex]} votes={votes[mostVotesIndex]} />
     </div>
   )
 }
