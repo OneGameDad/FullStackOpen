@@ -18,6 +18,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const total = good + neutral + bad
+  const average = total === 0 ? 0 : (good - bad) / total
+  const posPercentage = total === 0 ? 0 : (good / total) * 100
+
   const updateGood = () => {
     const newValue = good + 1
     console.log('Good now: ', newValue)
@@ -45,6 +49,9 @@ const App = () => {
       <Stats text={"Good:"} value={good} />
       <Stats text={"Neutral:"} value={neutral} />
       <Stats text={"Bad:"} value={bad} />
+      <Stats text={"Total:"} value={total} />
+      <Stats text={"Average:"} value={average.toFixed(10)} />
+      <Stats text={"Positive:"} value={`${posPercentage.toFixed(10)}%`} />
     </div>
   )
 }
