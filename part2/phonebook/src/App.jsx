@@ -14,8 +14,15 @@ const App = () => {
     const entryObject = {
       name: newName
     }
-    setPersons(persons.concat(entryObject))
-    setNewName('')
+
+    const exists = persons.find(person => person.name === newName)
+
+    if (exists) {
+      alert(`The name: "${newName}" already exists`)
+    } else {
+      setPersons(persons.concat(entryObject))
+      setNewName('')
+    }
   }
 
   const handlePersonChange = (event) => {
