@@ -3,16 +3,18 @@ import NamesNNumbers from './components/NamesNNumbers'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '0455126060', id: 1 }
   ])
 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addEntry = (event) => {
     event.preventDefault()
     console.log('Button Clicked', event.target)
     const entryObject = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
 
     const exists = persons.find(person => person.name === newName)
@@ -22,12 +24,18 @@ const App = () => {
     } else {
       setPersons(persons.concat(entryObject))
       setNewName('')
+      setNewNumber('')
     }
   }
 
   const handlePersonChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
   }
 
   return (
@@ -38,6 +46,12 @@ const App = () => {
           name: <input
             value={newName}
             onChange={handlePersonChange}
+          />
+        </div>
+        <div>
+          number: <input
+            value={newNumber}
+            onChange={handleNumberChange}
           />
         </div>
         <div>
