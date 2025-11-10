@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NamesNNumbers from './components/NamesNNumbers'
 import AddPerson from './components/AddPerson'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -55,14 +56,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <p>
-          Show all entries with
-          <form>
-            <input value={filter} onChange={handleFilterChange} />
-          </form>
-        </p>
-      </div>
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add Entry</h3>
       <AddPerson
         addEntry={addEntry}
