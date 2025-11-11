@@ -38,15 +38,32 @@ const App = () => {
     const exists = persons.find(person => person.name === newName)
 
     if (exists) {
-      alert(`The name: "${newName}" already exists`)
-    } else {
-      phonebookService
-        .create(entryObject)
-        .then(returnedEntry => {
-          setPersons(persons.concat(returnedEntry))
-          setNewName('')
-          setNewNumber('')
-        })
+      const confirmUpdate = window.confirm(
+        `${newName} is already in the phonebook. Replace the associated number?`
+      )
+      if (confirmUpdate) {
+        const updatedPerson = { ...exists, number: newNumber }
+        phonebookService
+          .update(exists.id, updatedPerson)
+          .then(returnedEntry => {
+            setPersons(persons.map(p => p.id !== exists.id ? p : returnedEntry))
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            alert(`'${exists.name}' was already removed from the server`)
+            setPersons(persons.filter(p => p.id !== exists.id))
+          })
+      } else {
+        const newPerson = { name: newName, number: newNumber, }
+        phonebookService
+          .create(newPerson)
+          .then(returnedEntry => {
+            setPersons(persons.concat(returnedEntry))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     }
   }
 
@@ -59,6 +76,7 @@ const App = () => {
         })
     }
   }
+
 
   const handlePersonChange = (event) => {
     console.log(event.target.value)
