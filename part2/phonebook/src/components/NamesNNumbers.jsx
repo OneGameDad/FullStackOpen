@@ -1,13 +1,11 @@
 import Entry from './Entry'
 
-const NamesNNumbers = (props) => {
-  console.log(props)
-  const persons = props.persons
+const NamesNNumbers = ({ persons, removeEntry }) => {
   return (
     <div>
       {
         persons.map(person => (
-          <Entry key={person.name} person={person} />
+          <Entry key={person.name} person={person} removeEntry={removeEntry} />
         ))
       }
     </div>

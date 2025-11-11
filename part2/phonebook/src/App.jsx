@@ -50,6 +50,16 @@ const App = () => {
     }
   }
 
+  const removeEntry = (id) => {
+    if (window.confirm('Delete this entry?')) {
+      phonebookService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+
   const handlePersonChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -73,7 +83,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h3>Entries</h3>
-      <NamesNNumbers persons={filteredPersons} />
+      <NamesNNumbers persons={filteredPersons} removeEntry={removeEntry} />
     </div>
   )
 }
