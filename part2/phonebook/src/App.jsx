@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import NamesNNumbers from './components/NamesNNumbers'
 import AddPerson from './components/AddPerson'
 import Filter from './components/Filter'
+import phonebookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('Promise Fulfilled')
-        setPersons(response.data)
+    phonebookService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -43,9 +40,13 @@ const App = () => {
     if (exists) {
       alert(`The name: "${newName}" already exists`)
     } else {
-      setPersons(persons.concat(entryObject))
-      setNewName('')
-      setNewNumber('')
+      phonebookService
+        .create(entryObject)
+        .then(returnedEntry => {
+          setPersons(persons.concat(returnedEntry))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
