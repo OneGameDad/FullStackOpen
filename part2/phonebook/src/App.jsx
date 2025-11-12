@@ -3,12 +3,14 @@ import NamesNNumbers from './components/NamesNNumbers'
 import AddPerson from './components/AddPerson'
 import Filter from './components/Filter'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   useEffect(() => {
     phonebookService
@@ -28,13 +30,6 @@ const App = () => {
 
   const addEntry = (event) => {
     event.preventDefault()
-    console.log('Button Clicked', event.target)
-    const entryObject = {
-      name: newName,
-      number: newNumber,
-      id: String(persons.length + 1)
-    }
-
     const exists = persons.find(person => person.name === newName)
 
     if (exists) {
@@ -49,21 +44,32 @@ const App = () => {
             setPersons(persons.map(p => p.id !== exists.id ? p : returnedEntry))
             setNewName('')
             setNewNumber('')
+            setErrorMessage(`Updated '${exists.name}'`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
           .catch(error => {
-            alert(`'${exists.name}' was already removed from the server`)
+            setErrorMessage(`The entry for '${exists.name}' was already deleted from the server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
             setPersons(persons.filter(p => p.id !== exists.id))
           })
-      } else {
-        const newPerson = { name: newName, number: newNumber, }
-        phonebookService
-          .create(newPerson)
-          .then(returnedEntry => {
-            setPersons(persons.concat(returnedEntry))
-            setNewName('')
-            setNewNumber('')
-          })
       }
+    } else {
+      const newPerson = { name: newName, number: newNumber }
+      phonebookService
+        .create(newPerson)
+        .then(returnedEntry => {
+          setPersons(persons.concat(returnedEntry))
+          setNewName('')
+          setNewNumber('')
+          setErrorMessage(`Added '${returnedEntry.name}'`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
   }
 
@@ -72,6 +78,14 @@ const App = () => {
       phonebookService
         .remove(id)
         .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          setErrorMessage(
+            `The entry for '${persons.name}' was either already deleted or could not be deleted from the server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -91,6 +105,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add Entry</h3>
       <AddPerson
