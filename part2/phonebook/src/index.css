@@ -1,5 +1,18 @@
-.error {
-	color: red;
-	background: pink;
+.notification {
+	color: blue;
+	border-color: blue;
+	background-color: grey;
 	font-style: italic;
+}
+
+.notification.success {
+	color: green;
+	border-color: green;
+	background: lightgreen;
+}
+
+.notification.error {
+	color: red;
+	border-color: red;
+	background-color: pink;
 }

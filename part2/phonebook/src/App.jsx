@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [notification, setNotification] = useState({ message: null, type: null })
 
   useEffect(() => {
     phonebookService
@@ -44,15 +44,15 @@ const App = () => {
             setPersons(persons.map(p => p.id !== exists.id ? p : returnedEntry))
             setNewName('')
             setNewNumber('')
-            setErrorMessage(`Updated '${exists.name}'`)
+            setNotification({ message: `Updated '${exists.name}'`, type: 'success' })
             setTimeout(() => {
-              setErrorMessage(null)
+              setNotification({ message: null, type: null })
             }, 5000)
           })
           .catch(error => {
-            setErrorMessage(`The entry for '${exists.name}' was already deleted from the server`)
+            setNotification({ message: `The entry for '${exists.name}' was already deleted from the server`, type: 'error' })
             setTimeout(() => {
-              setErrorMessage(null)
+              setNotification({ message: null, type: null })
             }, 5000)
             setPersons(persons.filter(p => p.id !== exists.id))
           })
@@ -65,9 +65,9 @@ const App = () => {
           setPersons(persons.concat(returnedEntry))
           setNewName('')
           setNewNumber('')
-          setErrorMessage(`Added '${returnedEntry.name}'`)
+          setNotification({ message: `Added '${returnedEntry.name}'`, type: 'success' })
           setTimeout(() => {
-            setErrorMessage(null)
+            setNotification({ message: null, type: null })
           }, 5000)
         })
     }
@@ -79,12 +79,16 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
+          setNotification({ message: 'Successfully deleted entry', type: 'success' })
+          setTimeout(() => {
+            setNotification({ message: null, type: null })
+          }, 5000)
         })
         .catch(error => {
-          setErrorMessage(
-            `The entry for '${persons.name}' was either already deleted or could not be deleted from the server`)
+          setNotification(
+            { message: `The entry for '${persons.name}' was either already deleted from the server`, type: 'error' })
           setTimeout(() => {
-            setErrorMessage(null)
+            setNotification({ message: null, type: null })
           }, 5000)
           setPersons(persons.filter(p => p.id !== id))
         })
@@ -105,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={notification.message} type={notification.type} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h3>Add Entry</h3>
       <AddPerson
