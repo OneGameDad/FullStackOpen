@@ -7,6 +7,7 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [search, setSearch] = useState('')
   const [filtered, setFiltered] = useState([])
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     countryService
@@ -18,11 +19,11 @@ const App = () => {
       .catch(error => console.error('Error fetching countries: ', error))
   }, [])
 
-  if (!countries) {
+  if (countries.length === 0) {
     return (
       <div>
         <h1>Countries</h1>
-        <p>Nothing to Show</p>
+        <p>Loading... please wait...</p>
       </div>
     )
   }
@@ -30,9 +31,10 @@ const App = () => {
   const handleSearch = (event) => {
     const value = event.target.value
     setSearch(value)
+    setSelectedCountry(null)
 
     const lowerValue = value.toLowerCase()
-    const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(lowerValue)
+    const filteredCountries = countries.filter(country => country.name?.common?.toLowerCase().includes(lowerValue)
     )
     setFiltered(filteredCountries)
   }
@@ -41,7 +43,7 @@ const App = () => {
     <div>
       <h1>Countries</h1>
       <Filter search={search} handleSearch={handleSearch} />
-      <Countries filtered={filtered} />
+      <Countries countries={filtered} selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
     </div>
   )
 }

@@ -1,19 +1,19 @@
 import ShortEntry from './ShortEntry'
 import FullEntry from './FullEntry'
 
-const Countries = ({ filtered }) => {
-  if (filtered.length === 0) {
+const Countries = ({ countries, selectedCountry, setSelectedCountry }) => {
+  if (countries.length === 0) {
     return (
       <p>No countries match the filter.</p>
     )
   }
-  else if (filtered.length === 1) {
-    const country = filtered[0]
+  else if (countries.length === 1) {
+    const country = countries[0]
     return (
       <FullEntry country={country} />
     )
   }
-  else if (filtered.length > 10) {
+  else if (countries.length > 10) {
     return (
       <p>
         Too many countries to display, get more specific.
@@ -21,15 +21,17 @@ const Countries = ({ filtered }) => {
     )
   }
   return (
-    <div>
-      <ul>
-        {filtered.map(country => (
-          <li key={country.cca3}>
-            <ShortEntry country={country} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {countries.map(country => (
+        <li key={country.cca3}>
+          <ShortEntry
+            country={country}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+          />
+        </li>
+      ))}
+    </ul>
   )
 }
 
