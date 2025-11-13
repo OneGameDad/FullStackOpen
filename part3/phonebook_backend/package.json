@@ -1,0 +1,16 @@
+{
+  "name": "phonebook_backend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"error: no tests found\" && exit 1"
+  },
+  "author": "Gregory Pellechi",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
