@@ -34,6 +34,18 @@ app.get('/api/persons', (request, response) => {
 	response.json(persons)
 })
 
+app.get('/api/persons/:id', (request, response) => {
+	const id = request.params.id
+	const person = persons.find(person => person.id === id)
+
+	if (person) {
+		response.json(person)
+	} else {
+		response.statusMessage = "Could not find that person in the phonebook."
+		response.status(404).end()
+	}
+})
+
 const generateDate = () => {
 	const date = new Date()
 	return date
